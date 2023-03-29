@@ -21,12 +21,12 @@ public class TaskService {
         this.taskDao = taskDao;
     }
 
-    public void addTask(String header, String desc, Long idOfAuthor){
+    public void addTask(String header, String desc,LocalDate toDate, Long idOfAuthor){
         Task task = new Task();
         task.setHeader(header);
         task.setDescription(desc);
         task.setIdOfAuthor(idOfAuthor);
-        task.setToDate(LocalDate.now());
+        task.setToDate(toDate);
         taskDao.addTask(task);
     }
 

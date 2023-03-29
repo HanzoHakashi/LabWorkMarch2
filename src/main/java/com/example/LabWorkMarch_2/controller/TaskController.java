@@ -6,6 +6,7 @@ import com.example.LabWorkMarch_2.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,9 +32,10 @@ public class TaskController {
     }
 
     @PostMapping("/newTask")
-    public void newTask(@RequestParam String header,@RequestParam String desc, Authentication authentication){
+    public void newTask(@RequestParam String header, @RequestParam String desc, @RequestParam String toDate, Authentication authentication){
         Long idOfAuthor =  userService.findUserByEmail(authentication.getName());
-        taskService.addTask(header,desc,idOfAuthor);
+
+        taskService.addTask(header,desc,LocalDate.parse(toDate),idOfAuthor);
     }
     @PostMapping("/newStatus")
     public void changeStatus(@RequestParam String status,@RequestParam Long idOfTask, Authentication authentication){
