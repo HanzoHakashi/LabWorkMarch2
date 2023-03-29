@@ -8,6 +8,7 @@ import com.example.LabWorkMarch_2.exeption.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,21 +16,29 @@ import java.util.stream.Collectors;
 public class TaskService {
     private final TaskDao taskDao;
 
+
     public TaskService(TaskDao taskDao) {
         this.taskDao = taskDao;
     }
 
-    public void addTask(String header, String desc, String email){
+    public void addTask(String header, String desc, Long idOfAuthor){
         Task task = new Task();
         task.setHeader(header);
         task.setDescription(desc);
-        task.setEmailOfAuthor(email);
+        task.setIdOfAuthor(idOfAuthor);
         task.setToDate(LocalDate.now());
         taskDao.addTask(task);
     }
 
-    public List<TaskDto> getTasksOfUser(String email){
-        var taskList = taskDao.getTasksOfUser(email);
+    public void changeStatus(String status, Long idOfAuthor, Long id){
+        if (!Arrays.asList("NEW", "IN WORK", "COMPLETED").contains(status.toUpperCase())) {
+            System.out.println("Invalid status value: " + status);
+            return;}
+        taskDao.changeStatus(status, idOfAuthor,id);
+    }
+
+    public List<TaskDto> getTasksOfUser(Long idOfAuthor){
+        var taskList = taskDao.getTasksOfUser(idOfAuthor);
         return taskList.stream().map(TaskDto::from).collect(Collectors.toList());
     }
 

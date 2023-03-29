@@ -27,21 +27,20 @@ public class TaskDao extends BaseDao{
                 "    header  varchar not null,\n" +
                 "    description  varchar not null,\n" +
                 "    toDate DATE not null,\n" +
-                "    emailOfAuthor  varchar not null,\n" +
-                "    foreign key (emailOfAuthor) references usr (email),\n" +
+                "    idOfAuthor  bigserial not null,\n" +
+                "    foreign key (idOfAuthor) references usr (id),\n" +
                 "    status  varchar default 'NEW'\n" +
                 ");");
     }
 
-    public List<Task> getTasksOfUser(String email){
-        String sql = "select id," +
-                "header,status,toDate" +
-                "from tasks where emailOfAuthor = ?";
-        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Task.class),email);
+    public List<Task> getTasksOfUser(Long id){
+        String sql = "select id ,header,status,toDate " +
+                "from tasks where idOfAuthor = ?";
+        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(Task.class),id);
     }
 
     public Optional<Task> checkDescByID(Long id){
-        String sql = "select description " +
+        String sql = "select id ,description " +
                 "from tasks " +
                 "where id = ?";
         return Optional.ofNullable(DataAccessUtils.singleResult(
@@ -50,21 +49,27 @@ public class TaskDao extends BaseDao{
     }
 
     public void addTask(Task task){
-        String sql = "insert into tasks(header,description,toDate,email)"+
+        String sql = "insert into tasks(header,description,toDate,idOfAuthor)"+
                 "values(?,?,?,?)";
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setString(1,task.getHeader());
             ps.setString(2,task.getDescription());
             ps.setDate(3, Date.valueOf(task.getToDate()));
-            ps.setString(4, task.getEmailOfAuthor());
+            ps.setLong(4, task.getIdOfAuthor());
             return ps;
         });
     }
 
-    public void changeStatus(String status,String emailOfAuthor){
-        String sql = "update tasks set status = ? where emailOfAuthor = ?";
-        jdbcTemplate.update(sql,status,emailOfAuthor);
+    public void changeStatus(String status,Long idOfAuthor,Long id){
+        String sql = "update tasks set status = ? where idOfAuthor = ? " +
+                "and id = ?";
+        jdbcTemplate.update(sql,status,idOfAuthor,id);
+    }
+
+    public void deleteAll() {
+        String sql = "delete from tasks";
+        jdbcTemplate.update(sql);
     }
 
 }

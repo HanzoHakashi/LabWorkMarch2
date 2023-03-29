@@ -16,7 +16,7 @@ public class TaskDto {
                 .header(task.getHeader())
                 .description(task.getDescription())
                 .toDate(task.getToDate())
-                .emailOfAuthor(task.getEmailOfAuthor())
+                .idOfAuthor(task.getIdOfAuthor())
                 .status(task.getStatus())
                 .build();
     }
@@ -24,6 +24,6 @@ public class TaskDto {
     private String header;
     private String description;
     private LocalDate toDate;
-    private String emailOfAuthor;//fk
+    private Long idOfAuthor;//fk
     private String status;
 }
