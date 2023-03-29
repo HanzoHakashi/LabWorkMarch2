@@ -25,6 +25,12 @@ public class InitDatabase {
                 user1.setEmail("ssj@gmail.com");
                 user1.setPassword("kamehameha213");
                 userDao.save(user1);
+
+                User user2 = new User();
+                user2.setUsername("Guts");
+                user2.setEmail("berserk@gmail.com");
+                user2.setPassword("griffitmustdie");
+                userDao.save(user2);
             };
         }
 }
