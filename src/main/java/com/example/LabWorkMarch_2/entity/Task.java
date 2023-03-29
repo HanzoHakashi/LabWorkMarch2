@@ -16,7 +16,7 @@ public class Task {
     private String header;
     private String description;
     private LocalDate toDate;
-    private String usernameOfAuthor;//fk
+    private String emailOfAuthor;//fk
     private String status;
 
  }
